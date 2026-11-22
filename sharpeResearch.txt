@@ -1,0 +1,48 @@
+The goal is to take a sample of x stocks, and construct a portfolio
+that is size y. The portfolio should maximize the sharpe ratio.
+This is mainly an excersise in the functional  capabilities of OCaml.
+We need to use combinatorics to examine every possible portfolio of
+size y from the x options. This is x choose y. We will end up choosing
+the portfolio that maximizes the sharpe ratio from these choices.
+
+we are going to use 5 years of history and monthly time steps. so 60 months.
+
+Article used: https://www.investopedia.com/terms/s/sharperatio.asp
+
+The Module we use for manipulating CSV: 
+    https://ocaml.org/p/csv/2.4/doc/csv/Csv/index.html?utm_source=chatgpt.com#val-load
+
+The link to the data we use for the risk free return rate
+    https://fred.stlouisfed.org/series/GS1M?utm_source=chatgpt.com#
+    
+if time at the end of the project:
+    Optimize the portfolio using the first 48 months, then calculate how that selected 
+    portfolio would have performed over the final 12 months without reoptimizing
+
+RESEARCH INTO HOW TO BUILD A SHARPE RATIO:
+- compare an investments returns with it's risk
+- numerator: realized or expected returns - benchmark (e.g. risk-free rate of return)
+- denominator: standard deviation of returns over the same period
+- the reward to variability ratio. 
+- Sharpe Ratio = (Rp - Rf) / sd(p)
+    - Rp = return of portfolio
+    - Rf = risk free rate
+    - sd(p) standard deviation of portfolio's excess returns
+- the SD derived from variability of returns for a series of time intervals (summation?)
+- numerator: average of return differentials in each of the incremental periods making up the total
+    - e.g. 10 year sharpe ratio -> avg 120 monthly return differentials
+    - in the same example denominator is SD of those monthly returns
+Denominator: 1. Take the return variance from the average return in each of the incremental periods, square it, and sum the squares from all of the incremental periods.
+             2. Divide the sum by the number of incremental periods.
+             3. Take the square root of the quotient.
+- risk free rate: investors hypothetical minimal borrowing cost
+- the ratio assumes that the historical record of returns has some predictive value
+    - NVDIA crashing because of jensen huang is not predictable
+- Generally the higher the sharpe ratio the more attractive the risk adjusted return
+- negative ratio means benchmark rate is greater than portfolios historical or projected return
+- for this project we use historical returns
+- longer return measurement intervals means lower estimate of volatilty
+    - practed if a portfolio manager wants to manipulate their ratio to be better
+- we typically consider the volatility of monthly returns
+- we don't want to cherry pick, we want to stay objective in our historical look back 
+- US treasure bond yields are a proxy for the risk-free rate of return
