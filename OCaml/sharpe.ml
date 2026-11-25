@@ -3,3 +3,6 @@
 let tickers = ["AMT";"CAT";"GOOGL";"HD"]
 let numerator = 
   (RpAll.portfolio_expected_return tickers) -. (Rf.calculate_Rf)
+
+let denominator = Sd.denom tickers
+let sharpe = numerator /. denominator
