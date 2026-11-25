@@ -50,9 +50,12 @@ I't's almost more productive to wrap everything into one large function *)
 let summation tickers = 
   (* set up a squaring function *)
   let square x = x *. x in
+  (* set up the precursor list *)
   let before_sum = List.map (fun w -> portfolio_monthI_returns tickers (w + 2)) (List.init 60 (fun x -> x)) in
   let avg = RpAll.portfolio_expected_return tickers in
+  (* fold left to find the summation *)
   List.fold_left (fun acc x -> acc +. square (x -. avg)) 0.0 before_sum
 
+(* the final denominator is *)
 let denom tickers =
   sqrt (summation tickers /. 59.0)
