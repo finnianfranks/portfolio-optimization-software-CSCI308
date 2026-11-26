@@ -36,9 +36,17 @@ let portfolio_monthI_returns tickers num_month =
   let weight = float_of_int (List.length tickers) in
   let curr_month = List.nth data (num_month) in
   let prev_month = List.nth data (num_month-1) in
-  
-  
+  (* more debugging 
+  List.iter (fun x -> Printf.printf "%d" x) ticker_indexes;
+  print_newline (); *) 
   List.fold_left (fun a b -> a +. (b /. weight)) (0.0) (List.map (fun x -> 
+    (* debugging: ok problem is that it's curr_month x is taking a data which means that x is 0 for some reason.*)
+    (* Printf.printf "%s" (List.nth curr_month x);
+    print_newline ();
+
+    Printf.printf "%s" (List.nth prev_month x);
+    print_newline ();
+    *)
     let curr = float_of_string (List.nth curr_month x) in
     let prev = float_of_string (List.nth prev_month x) in
     individual_return curr prev) ticker_indexes)
@@ -50,9 +58,12 @@ I't's almost more productive to wrap everything into one large function *)
 let summation tickers = 
   (* set up a squaring function *)
   let square x = x *. x in
+  (* set up the precursor list *)
   let before_sum = List.map (fun w -> portfolio_monthI_returns tickers (w + 2)) (List.init 60 (fun x -> x)) in
   let avg = RpAll.portfolio_expected_return tickers in
+  (* fold left to find the summation *)
   List.fold_left (fun acc x -> acc +. square (x -. avg)) 0.0 before_sum
 
+(* the final denominator is *)
 let denom tickers =
   sqrt (summation tickers /. 59.0)
