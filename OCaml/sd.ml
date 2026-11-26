@@ -36,9 +36,17 @@ let portfolio_monthI_returns tickers num_month =
   let weight = float_of_int (List.length tickers) in
   let curr_month = List.nth data (num_month) in
   let prev_month = List.nth data (num_month-1) in
-  
-  
+  (* more debugging 
+  List.iter (fun x -> Printf.printf "%d" x) ticker_indexes;
+  print_newline (); *) 
   List.fold_left (fun a b -> a +. (b /. weight)) (0.0) (List.map (fun x -> 
+    (* debugging: ok problem is that it's curr_month x is taking a data which means that x is 0 for some reason.*)
+    (* Printf.printf "%s" (List.nth curr_month x);
+    print_newline ();
+
+    Printf.printf "%s" (List.nth prev_month x);
+    print_newline ();
+    *)
     let curr = float_of_string (List.nth curr_month x) in
     let prev = float_of_string (List.nth prev_month x) in
     individual_return curr prev) ticker_indexes)
